@@ -59,4 +59,4 @@ firebase-debug.log
 .firebase
 
 # Docker
-.dockerignore
+.dockerignoresrc.zip
