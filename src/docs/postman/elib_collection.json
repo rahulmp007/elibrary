@@ -1,0 +1,1674 @@
+{
+  "info": {
+    "name": "eLibrary API - Manual Token Management",
+    "description": "Complete eLibrary API collection for manual token management via Authorization tab",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "patch": 0
+    }
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string",
+      "description": "eLibrary API base URL"
+    },
+    {
+      "key": "library_id",
+      "value": "",
+      "type": "string",
+      "description": "Copy library ID from create library response"
+    },
+    {
+      "key": "book_id", 
+      "value": "",
+      "type": "string",
+      "description": "Copy book ID from create book response"
+    }
+  ],
+  "item": [
+    {
+      "name": "🏥 Health Check",
+      "request": {
+        "auth": {"type": "noauth"},
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["health"]
+        },
+        "description": "Check eLibrary server status - No auth required"
+      }
+    },
+    {
+      "name": "👥 User Management",
+      "item": [
+        {
+          "name": "Register Librarian",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bob Librarian\",\n  \"email\": \"librarian@elibrary.com\",\n  \"password\": \"password123\",\n  \"role\": \"Librarian\",\n  \"phone\": \"+1555666777\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "POST /api/v1/users/register - Register librarian user. Copy token from response for library operations."
+          }
+        },
+        {
+          "name": "Register Author",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Author\",\n  \"email\": \"author@elibrary.com\",\n  \"password\": \"password123\",\n  \"role\": \"Author\",\n  \"phone\": \"+1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "POST /api/v1/users/register - Register author user. Copy token from response for book operations."
+          }
+        },
+        {
+          "name": "Register Borrower",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Borrower\",\n  \"email\": \"borrower@elibrary.com\",\n  \"password\": \"password123\",\n  \"role\": \"Borrower\",\n  \"phone\": \"+1987654321\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "POST /api/v1/users/register - Register borrower user. Copy token from response for borrowing operations."
+          }
+        },
+        {
+          "name": "User Login",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"librarian@elibrary.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/login",
+              "host": ["{{base_url}}"],
+              "path": ["users", "login"]
+            },
+            "description": "POST /api/v1/users/login - Login with any registered user. Change email as needed. Copy token from response."
+          }
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_YOUR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile"]
+            },
+            "description": "GET /api/v1/users/profile - Get current user profile info. Paste any valid token in Authorization tab."
+          }
+        }
+      ],
+      "description": "User registration, login, and profile management"
+    },
+    {
+      "name": "🏛️ Libraries Management",
+      "item": [
+        {
+          "name": "Get All Libraries",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/libraries",
+              "host": ["{{base_url}}"],
+              "path": ["libraries"]
+            },
+            "description": "GET /api/v1/libraries - Retrieve a list of all libraries. Any valid token works."
+          }
+        },
+        {
+          "name": "Get Library by ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}"]
+            },
+            "description": "GET /api/v1/libraries/:id - Retrieve details of a specific library by its ID including all books and borrower details."
+          }
+        },
+        {
+          "name": "Create Library",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Central eLibrary\",\n  \"address\": \"123 Library Street, Digital City, State 12345\",\n  \"phone\": \"+1234567890\",\n  \"email\": \"central@elibrary.com\",\n  \"description\": \"Main digital library branch\",\n  \"operatingHours\": \"9AM - 8PM Monday to Saturday\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libraries",
+              "host": ["{{base_url}}"],
+              "path": ["libraries"]
+            },
+            "description": "POST /api/v1/libraries - Create a new library (Librarian token required). Copy library._id from response."
+          }
+        },
+        {
+          "name": "Update Library",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Central eLibrary - Updated\",\n  \"description\": \"Updated main digital library with new facilities\",\n  \"operatingHours\": \"8AM - 9PM Monday to Sunday\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}"]
+            },
+            "description": "PUT /api/v1/libraries/:id - Update details of a specific library by its ID (Librarian token required)."
+          }
+        },
+        {
+          "name": "Delete Library",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}"]
+            },
+            "description": "DELETE /api/v1/libraries/:id - Delete a library by its ID (Librarian token required)."
+          }
+        }
+      ],
+      "description": "Complete library CRUD operations"
+    },
+    {
+      "name": "📚 Books Management",
+      "item": [
+        {
+          "name": "Get All Books",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["books"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of items per page"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search term (optional)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "GET /api/v1/books - Retrieve a list of all books with pagination and search. Any valid token works."
+          }
+        },
+        {
+          "name": "Get Book by ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["books", "{{book_id}}"]
+            },
+            "description": "GET /api/v1/books/:id - Retrieve details of a specific book by its ID including author, library, and borrower details."
+          }
+        },
+        {
+          "name": "Create Book (JSON)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_AUTHOR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Great Digital Adventure\",\n  \"library\": \"{{library_id}}\",\n  \"isbn\": \"9781234567890\",\n  \"genre\": \"Adventure\",\n  \"description\": \"An exciting digital adventure story about technology and friendship\",\n  \"publishedYear\": 2023,\n  \"pages\": 300,\n  \"language\": \"English\",\n  \"borrowingCharge\": 10,\n  \"condition\": \"Good\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            },
+            "description": "POST /api/v1/books - Create a new book entry (Author token required). Copy book._id from response."
+          }
+        },
+        {
+          "name": "Create Book with Image Upload",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_AUTHOR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "title", "value": "eBook with Cover Image", "type": "text"},
+                {"key": "library", "value": "{{library_id}}", "type": "text"},
+                {"key": "isbn", "value": "9780987654321", "type": "text"},
+                {"key": "genre", "value": "Science Fiction", "type": "text"},
+                {"key": "description", "value": "A futuristic eBook with digital cover image", "type": "text"},
+                {"key": "publishedYear", "value": "2023", "type": "text"},
+                {"key": "pages", "value": "250", "type": "text"},
+                {"key": "language", "value": "English", "type": "text"},
+                {"key": "borrowingCharge", "value": "15", "type": "text"},
+                {"key": "condition", "value": "Excellent", "type": "text"},
+                {"key": "image", "type": "file", "description": "Select image file for book cover (Firebase storage)"}
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            },
+            "description": "POST /api/v1/books - Create book with image upload to Firebase (Author token required)."
+          }
+        },
+        {
+          "name": "Update Book",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_AUTHOR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Great Digital Adventure - Second Edition\",\n  \"description\": \"An exciting digital adventure story about technology, friendship, and discovery in the modern world\",\n  \"borrowingCharge\": 12,\n  \"condition\": \"Excellent\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/books/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["books", "{{book_id}}"]
+            },
+            "description": "PUT /api/v1/books/:id - Update details of a specific book by its ID (Author ownership required)."
+          }
+        },
+        {
+          "name": "Delete Book",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_AUTHOR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["books", "{{book_id}}"]
+            },
+            "description": "DELETE /api/v1/books/:id - Delete a book by its ID (Author ownership required)."
+          }
+        }
+      ],
+      "description": "Complete book CRUD operations with Firebase image support"
+    },
+    {
+      "name": "📋 Library Inventory Management",
+      "item": [
+        {
+          "name": "Get Library Inventory",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}/inventory?available=true",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}", "inventory"],
+              "query": [
+                {
+                  "key": "available",
+                  "value": "true",
+                  "description": "Filter by availability (optional)"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "GET /api/v1/libraries/:id/inventory - Retrieve a list of books available in a specific library."
+          }
+        },
+        {
+          "name": "Add Book to Library Inventory",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookId\": \"{{book_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}/inventory",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}", "inventory"]
+            },
+            "description": "POST /api/v1/libraries/:id/inventory - Add a book to the inventory of a specific library (Librarian token required)."
+          }
+        },
+        {
+          "name": "Remove Book from Library Inventory",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}/inventory/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}", "inventory", "{{book_id}}"]
+            },
+            "description": "DELETE /api/v1/libraries/:id/inventory/:bookId - Remove a book from the inventory of a specific library by its ID (Librarian token required)."
+          }
+        }
+      ],
+      "description": "Library inventory management operations"
+    },
+    {
+      "name": "📖 Book Borrowing System",
+      "item": [
+        {
+          "name": "Borrow Book",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_BORROWER_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookId\": \"{{book_id}}\",\n  \"days\": 14\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/borrow",
+              "host": ["{{base_url}}"],
+              "path": ["borrow"]
+            },
+            "description": "POST /api/v1/borrow - Borrow a book against a charge (Borrower token required). Specify duration in days."
+          }
+        },
+        {
+          "name": "Return Borrowed Book",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_BORROWER_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/borrow/return/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["borrow", "return", "{{book_id}}"]
+            },
+            "description": "PUT /api/v1/borrow/return/:id - Return a borrowed book by its ID (Borrower token required)."
+          }
+        },
+        {
+          "name": "Get User's Borrowed Books",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_BORROWER_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/borrow/borrowed",
+              "host": ["{{base_url}}"],
+              "path": ["borrow", "borrowed"]
+            },
+            "description": "GET /api/v1/borrow/borrowed - Get all books currently borrowed by the authenticated user."
+          }
+        }
+      ],
+      "description": "Complete book borrowing and returning workflow"
+    },
+    {
+      "name": "🌐 Multilingual Support Testing",
+      "item": [
+        {
+          "name": "Get Books (Hindi via Header)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "hi",
+                "description": "Request Hindi language response"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            },
+            "description": "Test Hindi language support via Accept-Language header."
+          }
+        },
+        {
+          "name": "Get Books (Hindi via Query)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books?lang=hi",
+              "host": ["{{base_url}}"],
+              "path": ["books"],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "hi",
+                  "description": "Language parameter for Hindi"
+                }
+              ]
+            },
+            "description": "Test Hindi language support via query parameter."
+          }
+        },
+        {
+          "name": "Register User (Hindi Response)",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "hi",
+                "description": "Request Hindi language response"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"हिंदी टेस्ट यूजर\",\n  \"email\": \"hindi.test@elibrary.com\",\n  \"password\": \"password123\",\n  \"role\": \"Author\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "Test user registration with Hindi language response."
+          }
+        },
+        {
+          "name": "Create Library (Hindi Response)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "hi"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"केंद्रीय ई-पुस्तकालय\",\n  \"address\": \"123 लाइब्रेरी स्ट्रीट, डिजिटल सिटी\",\n  \"description\": \"मुख्य डिजिटल पुस्तकालय शाखा\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libraries",
+              "host": ["{{base_url}}"],
+              "path": ["libraries"]
+            },
+            "description": "Test library creation with Hindi language response."
+          }
+        }
+      ],
+      "description": "Test multilingual support (English/Hindi) across all endpoints"
+    },
+    {
+      "name": "❌ Error Scenarios & Edge Cases",
+      "item": [
+        {
+          "name": "Unauthorized Request (No Token)",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            },
+            "description": "Test request without authorization token - should return 401 Unauthorized."
+          }
+        },
+        {
+          "name": "Invalid Token",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "invalid.jwt.token.here",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            },
+            "description": "Test with invalid JWT token - should return 401 Invalid Token."
+          }
+        },
+        {
+          "name": "Wrong Role Access (Borrower → Create Library)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_BORROWER_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Unauthorized Library\",\n  \"address\": \"Test Address\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libraries",
+              "host": ["{{base_url}}"],
+              "path": ["libraries"]
+            },
+            "description": "Borrower trying to create library - should return 403 Forbidden (requires Librarian role)."
+          }
+        },
+        {
+          "name": "Wrong Role Access (Author → Borrow Book)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_AUTHOR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body":{
+  "info": {
+    "name": "Bookkeeping API - Manual Token Management",
+    "description": "Simple collection for manual token management via Authorization tab",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "library_id",
+      "value": "",
+      "type": "string",
+      "description": "Copy library ID from create library response"
+    },
+    {
+      "key": "book_id", 
+      "value": "",
+      "type": "string",
+      "description": "Copy book ID from create book response"
+    }
+  ],
+  "item": [
+    {
+      "name": "🏥 Health Check",
+      "request": {
+        "auth": {"type": "noauth"},
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["health"]
+        },
+        "description": "Check server status - No auth required"
+      }
+    },
+    {
+      "name": "👥 User Registration & Login",
+      "item": [
+        {
+          "name": "Register Librarian",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bob Librarian\",\n  \"email\": \"librarian@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"Librarian\",\n  \"phone\": \"+1555666777\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "Register librarian user. Copy token from response for library operations."
+          }
+        },
+        {
+          "name": "Register Author",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Author\",\n  \"email\": \"author@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"Author\",\n  \"phone\": \"+1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "Register author user. Copy token from response for book operations."
+          }
+        },
+        {
+          "name": "Register Borrower",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Borrower\",\n  \"email\": \"borrower@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"Borrower\",\n  \"phone\": \"+1987654321\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "Register borrower user. Copy token from response for borrowing operations."
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"librarian@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/login",
+              "host": ["{{base_url}}"],
+              "path": ["users", "login"]
+            },
+            "description": "Login with any registered user. Change email as needed."
+          }
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_YOUR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile"]
+            },
+            "description": "Get profile info. Paste token in Authorization tab."
+          }
+        }
+      ],
+      "description": "User registration and authentication"
+    },
+    {
+      "name": "🏛️ Libraries",
+      "item": [
+        {
+          "name": "Create Library",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Central Library\",\n  \"address\": \"123 Library Street, City, State 12345\",\n  \"phone\": \"+1234567890\",\n  \"email\": \"central@library.com\",\n  \"description\": \"Main library branch\",\n  \"operatingHours\": \"9AM - 8PM Monday to Saturday\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libraries",
+              "host": ["{{base_url}}"],
+              "path": ["libraries"]
+            },
+            "description": "Create library (Librarian token required). Copy library._id from response."
+          }
+        },
+        {
+          "name": "Get All Libraries",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/libraries",
+              "host": ["{{base_url}}"],
+              "path": ["libraries"]
+            },
+            "description": "Get all libraries. Any valid token works."
+          }
+        },
+        {
+          "name": "Get Library by ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}"]
+            },
+            "description": "Get library details with books. Set library_id variable or replace in URL."
+          }
+        },
+        {
+          "name": "Update Library",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Central Library - Updated\",\n  \"description\": \"Updated description\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}"]
+            },
+            "description": "Update library (Librarian token required)."
+          }
+        },
+        {
+          "name": "Delete Library",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}"]
+            },
+            "description": "Delete library (Librarian token required)."
+          }
+        }
+      ],
+      "description": "Library management operations"
+    },
+    {
+      "name": "📚 Books",
+      "item": [
+        {
+          "name": "Get All Books",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            },
+            "description": "Get all books with pagination. Any valid token works."
+          }
+        },
+        {
+          "name": "Create Book",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_AUTHOR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Great Adventure\",\n  \"library\": \"{{library_id}}\",\n  \"isbn\": \"9781234567890\",\n  \"genre\": \"Adventure\",\n  \"description\": \"An exciting adventure story\",\n  \"publishedYear\": 2023,\n  \"pages\": 300,\n  \"language\": \"English\",\n  \"borrowingCharge\": 10,\n  \"condition\": \"Good\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            },
+            "description": "Create book (Author token required). Copy book._id from response."
+          }
+        },
+        {
+          "name": "Create Book with Image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_AUTHOR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "title", "value": "Book with Cover", "type": "text"},
+                {"key": "library", "value": "{{library_id}}", "type": "text"},
+                {"key": "genre", "value": "Fiction", "type": "text"},
+                {"key": "description", "value": "A book with cover image", "type": "text"},
+                {"key": "publishedYear", "value": "2023", "type": "text"},
+                {"key": "pages", "value": "250", "type": "text"},
+                {"key": "borrowingCharge", "value": "15", "type": "text"},
+                {"key": "image", "type": "file", "description": "Select image file"}
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            },
+            "description": "Create book with image upload (Author token required)."
+          }
+        },
+        {
+          "name": "Get Book by ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["books", "{{book_id}}"]
+            },
+            "description": "Get book details with relationships."
+          }
+        },
+        {
+          "name": "Update Book",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_AUTHOR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Great Adventure - Updated\",\n  \"description\": \"Updated description\",\n  \"borrowingCharge\": 12\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/books/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["books", "{{book_id}}"]
+            },
+            "description": "Update book (Author ownership required)."
+          }
+        },
+        {
+          "name": "Delete Book",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_AUTHOR_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["books", "{{book_id}}"]
+            },
+            "description": "Delete book (Author ownership required)."
+          }
+        }
+      ],
+      "description": "Book management operations"
+    },
+    {
+      "name": "📋 Library Inventory",
+      "item": [
+        {
+          "name": "Get Library Inventory",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}/inventory",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}", "inventory"]
+            },
+            "description": "Get all books in library inventory."
+          }
+        },
+        {
+          "name": "Add Book to Library",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookId\": \"{{book_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}/inventory",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}", "inventory"]
+            },
+            "description": "Add book to library inventory (Librarian token required)."
+          }
+        },
+        {
+          "name": "Remove Book from Library",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_LIBRARIAN_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/libraries/{{library_id}}/inventory/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libraries", "{{library_id}}", "inventory", "{{book_id}}"]
+            },
+            "description": "Remove book from library inventory (Librarian token required)."
+          }
+        }
+      ],
+      "description": "Library inventory management"
+    },
+    {
+      "name": "📖 Book Borrowing",
+      "item": [
+        {
+          "name": "Borrow Book",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_BORROWER_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookId\": \"{{book_id}}\",\n  \"days\": 14\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/borrow",
+              "host": ["{{base_url}}"],
+              "path": ["borrow"]
+            },
+            "description": "Borrow book (Borrower token required)."
+          }
+        },
+        {
+          "name": "Get Borrowed Books",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_BORROWER_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/borrow/borrowed",
+              "host": ["{{base_url}}"],
+              "path": ["borrow", "borrowed"]
+            },
+            "description": "Get user's borrowed books."
+          }
+        },
+        {
+          "name": "Return Book",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_BORROWER_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/borrow/return/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["borrow", "return", "{{book_id}}"]
+            },
+            "description": "Return borrowed book."
+          }
+        }
+      ],
+      "description": "Book borrowing operations"
+    },
+    {
+      "name": "🌐 Multilingual Testing",
+      "item": [
+        {
+          "name": "Get Books (Hindi)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "hi"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            },
+            "description": "Test Hindi language support via header."
+          }
+        },
+        {
+          "name": "Get Books (Query Param)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_ANY_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books?lang=hi",
+              "host": ["{{base_url}}"],
+              "path": ["books"],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "hi"
+                }
+              ]
+            },
+            "description": "Test Hindi language support via query parameter."
+          }
+        }
+      ],
+      "description": "Multilingual support testing"
+    },
+    {
+      "name": "❌ Error Testing",
+      "item": [
+        {
+          "name": "Unauthorized Request",
+          "request": {
+            "auth": {"type": "noauth"},
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            },
+            "description": "Test without token - should return 401."
+          }
+        },
+        {
+          "name": "Wrong Role Test",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_BORROWER_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Library\",\n  \"address\": \"Test Address\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libraries",
+              "host": ["{{base_url}}"],
+              "path": ["libraries"]
+            },
+            "description": "Borrower trying to create library - should return 403."
+          }
+        }
+      ],
+      "description": "Error scenario testing"
+    }
+  ]
+}
