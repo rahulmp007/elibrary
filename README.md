@@ -1,86 +1,60 @@
-# Elibrary Service API
+# E-Library Management System
 
-A comprehensive library management system built with Node.js, Express, and MongoDB, featuring role-based access control, multilingual support, and Firebase integration.
+A comprehensive library management system built with Node.js, Express.js, MongoDB, and Firebase for file storage. The system supports multiple user roles (Authors, Borrowers, and Librarians) with multilingual support (English and Hindi).
 
-## 🏗️ **Architecture & Features**
+## 🚀 Features
 
-### **Core Models**
-- **Users**: Authors, Borrowers, and Librarians with role-based permissions
-- **Books**: Complete book management with Firebase image storage
-- **Libraries**: Library management with inventory control
+- **Multi-role Authentication**: Support for Authors, Borrowers, and Librarians
+- **Book Management**: Create, read, update, and delete books with image upload
+- **Library Management**: Manage multiple libraries with inventory tracking
+- **Borrowing System**: Book borrowing and returning with due date tracking
+- **Multilingual Support**: English and Hindi language support
+- **File Upload**: Firebase integration for book cover images
+- **Rate Limiting**: API rate limiting for security
+- **Input Validation**: Comprehensive request validation
+- **Error Handling**: Centralized error handling with localized messages
+- **Pagination**: Efficient data pagination
+- **Search**: Text-based book search functionality
 
-### **Key Features**
-- ✅ **Role-Based Authentication**: JWT with Author/Borrower/Librarian roles
-- ✅ **Multilingual Support**: English and Hindi localization
-- ✅ **Firebase Integration**: Book cover image storage
-- ✅ **Library Inventory Management**: Add/remove books from library collections
-- ✅ **Book Borrowing System**: Complete borrowing workflow with charges
-- ✅ **Security**: Rate limiting, input validation, CORS protection
-- ✅ **Error Handling**: Centralized multilingual error management
+## 🛠 Tech Stack
 
-## 📁 **Project Structure**
-```
-bookkeeping-service/
-├── src/
-│   ├── config/
-│   │   ├── constants.js      # Application constants & multilingual messages
-│   │   ├── database.js       # MongoDB connection
-│   │   ├── firebase.js       # Firebase configuration
-│   │   └── index.js          # Environment configuration
-│   ├── controllers/          # Request handlers
-│   │   ├── auth.controller.js
-│   │   ├── book.controller.js
-│   │   ├── borrow.controller.js
-│   │   └── library.controller.js
-│   ├── middlewares/          # Custom middleware
-│   │   ├── auth.middleware.js      # JWT authentication & authorization
-│   │   ├── error.middleware.js     # Centralized error handling
-│   │   ├── language.middleware.js  # Multilingual support
-│   │   ├── upload.middleware.js    # File upload handling
-│   │   └── validation.middleware.js # Input validation
-│   ├── models/               # MongoDB schemas
-│   │   ├── User.model.js
-│   │   ├── Book.model.js
-│   │   └── Library.model.js
-│   ├── routes/               # API routes
-│   │   ├── auth.routes.js
-│   │   ├── book.routes.js
-│   │   ├── borrow.routes.js
-│   │   └── library.routes.js
-│   ├── services/             # Business logic
-│   │   ├── auth.service.js
-│   │   ├── book.service.js
-│   │   ├── borrow.service.js
-│   │   ├── library.service.js
-│   │   └── upload.service.js
-│   ├── utils/                # Utilities
-│   │   ├── localization.js   # Message localization
-│   │   ├── logger.js         # Winston logger
-│   │   ├── pagination.js     # Pagination helpers
-│   │   └── response.js       # Response formatters
-│   ├── validators/           # Input validation schemas
-│   │   ├── auth.validator.js
-│   │   ├── book.validator.js
-│   │   ├── borrow.validator.js
-│   │   └── library.validator.js
-│   └── app.js               # Express application setup
-├── logs/                    # Application logs
-├── package.json
-├── .env.example
-└── index.js                # Application entry point
-```
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB with Mongoose ODM
+- **Authentication**: JWT (JSON Web Tokens)
+- **File Storage**: Firebase Storage
+- **Validation**: Express Validator
+- **File Upload**: Multer
+- **Logging**: Winston
+- **Security**: Helmet, CORS, Rate Limiting
 
-## 🚀 **Installation & Setup**
+## 📋 Prerequisites
 
-### **1. Clone and Install Dependencies**
+Before running the application, ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (v14 or higher)
+- [MongoDB](https://www.mongodb.com/) (v4.4 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- Firebase account for file storage
+
+## 🔧 Installation & Setup
+
+### 1. Clone the Repository
+
 ```bash
 git clone <repository-url>
-cd bookkeeping-service
+cd elibrary
+```
+
+### 2. Install Dependencies
+
+```bash
 npm install
 ```
 
-### **2. Environment Configuration**
-Create a `.env` file in the root directory:
+### 3. Environment Configuration
+
+Create a `.env` file in the root directory with the following variables:
+
 ```env
 # Server Configuration
 NODE_ENV=development
@@ -90,271 +64,326 @@ PORT=3000
 MONGODB_URI=mongodb://localhost:27017/elib
 
 # JWT Configuration
-JWT_SECRET=your-super-secure-jwt-secret
+JWT_SECRET=your_super_secure_jwt_secret_key_here
 JWT_EXPIRES_IN=24h
 
 # Firebase Configuration
-FIREBASE_PROJECT_ID=your-firebase-project-id
-FIREBASE_CLIENT_EMAIL=your-service-account-email
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nyour-private-key\n-----END PRIVATE KEY-----\n"
-FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
+FIREBASE_PROJECT_ID=your_firebase_project_id
+FIREBASE_CLIENT_EMAIL=your_firebase_client_email
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour Firebase private key here\n-----END PRIVATE KEY-----"
+FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+
+# Application Settings
+PASSWORD_MIN_LENGTH=8
+MAX_BORROW_DAYS=30
+DEFAULT_LATE_FEE_PER_DAY=5
 ```
 
-### **3. Database Setup (Local MongoDB)**
+### 4. Firebase Setup
+
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project or select existing one
+3. Go to Project Settings > Service Accounts
+4. Generate a new private key
+5. Enable Firebase Storage in your project
+6. Copy the credentials to your `.env` file
+
+### 5. MongoDB Setup
+
+**Option A: Local MongoDB**
 ```bash
-# Option 1: Install MongoDB locally
-# Download from: https://www.mongodb.com/try/download/community
-# Follow installation guide for your OS
+# Start MongoDB service
+mongod
 
-# Option 2: Use MongoDB Atlas (Cloud - Free)
-# 1. Sign up at https://www.mongodb.com/atlas
-# 2. Create a free cluster
-# 3. Get connection string and add to .env
-
-# Option 3: Quick local setup with Docker (Optional)
-docker run -d -p 27017:27017 --name mongodb mongo:latest
+# Or if using MongoDB as a service
+sudo systemctl start mongod
 ```
 
-### **4. Firebase Setup**
-1. Create a Firebase project at https://console.firebase.google.com
-2. Enable Storage in your Firebase project
-3. Generate a service account key:
-   - Go to Project Settings → Service Accounts
-   - Click "Generate new private key"
-   - Add the credentials to your `.env` file
+**Option B: MongoDB Atlas (Cloud)**
+1. Create account at [MongoDB Atlas](https://www.mongodb.com/atlas)
+2. Create a cluster
+3. Get connection string and update `MONGODB_URI` in `.env`
 
-### **5. Start the Application**
+### 6. Create Required Directories
+
 ```bash
-# Development mode
+mkdir logs
+```
+
+## 🚀 Running the Application
+
+### Development Mode
+
+```bash
+npm run dev
+```
+
+### Production Mode
+
+```bash
 npm start
-
-# The server will start on http://localhost:3000
 ```
 
-## 📡 **API Documentation**
+The server will start on the port specified in your `.env` file (default: 3000).
 
-### **Base URL**: `http://localhost:3000/api/v1`
+## 📚 API Documentation
 
-### **Authentication**
-All endpoints (except registration and login) require JWT authentication:
+### Base URL
 ```
-Authorization: Bearer <jwt_token>
-```
-
-### **Multilingual Support**
-Add language preference via header or query parameter:
-```
-Accept-Language: hi  # For Hindi
-# Or
-GET /api/v1/books?lang=hi
+http://localhost:3000/api/v1
 ```
 
-### **API Endpoints**
+### Authentication Endpoints
 
-#### **Authentication**
-```
-POST /api/v1/users/register    # Register new user
-POST /api/v1/users/login       # User login
-GET  /api/v1/users/profile     # Get user profile (protected)
-```
-
-#### **Books Management**
-```
-GET    /api/v1/books           # Get all books (with pagination)
-GET    /api/v1/books/:id       # Get book details with relationships
-POST   /api/v1/books           # Create new book (Authors only, with image upload)
-PUT    /api/v1/books/:id       # Update book (Author ownership required)
-DELETE /api/v1/books/:id       # Delete book (Author ownership required)
-```
-
-#### **Libraries Management**
-```
-GET    /api/v1/libraries           # Get all libraries
-GET    /api/v1/libraries/:id       # Get library with all books
-POST   /api/v1/libraries           # Create library (Librarians only)
-PUT    /api/v1/libraries/:id       # Update library (Librarians only)
-DELETE /api/v1/libraries/:id       # Delete library (Librarians only)
-```
-
-#### **Library Inventory**
-```
-GET    /api/v1/libraries/:id/inventory         # Get library inventory
-POST   /api/v1/libraries/:id/inventory         # Add book to library (Librarians only)
-DELETE /api/v1/libraries/:id/inventory/:bookId # Remove book from library (Librarians only)
-```
-
-#### **Book Borrowing**
-```
-POST /api/v1/borrow              # Borrow a book (Borrowers only)
-PUT  /api/v1/borrow/return/:id   # Return a book (Borrowers only)
-GET  /api/v1/borrow/borrowed     # Get user's borrowed books (Borrowers only)
-```
-
-### **Request/Response Examples**
-
-#### **User Registration**
-```bash
-POST /api/v1/users/register
+#### Register User
+```http
+POST /users/register
 Content-Type: application/json
 
 {
   "name": "John Doe",
   "email": "john@example.com",
-  "password": "password123",
+  "password": "SecurePass123!",
   "role": "Author",
-  "phone": "+1234567890"
+  "phone": "+1234567890",
+  "address": "123 Main St"
 }
 ```
 
-#### **Create Book with Image**
-```bash
-POST /api/v1/books
+#### Login
+```http
+POST /users/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "SecurePass123!"
+}
+```
+
+#### Get Profile
+```http
+GET /users/profile
+Authorization: Bearer <jwt_token>
+```
+
+### Book Endpoints
+
+#### Get All Books
+```http
+GET /books?page=1&limit=10&search=javascript
+Authorization: Bearer <jwt_token>
+```
+
+#### Get Book by ID
+```http
+GET /books/:id
+Authorization: Bearer <jwt_token>
+```
+
+#### Create Book (Authors only)
+```http
+POST /books
 Authorization: Bearer <jwt_token>
 Content-Type: multipart/form-data
 
 {
-  "title": "Sample Book",
-  "library": "library_id",
-  "genre": "Fiction",
-  "description": "A sample book",
-  "publishedYear": 2023,
-  "pages": 300,
-  "borrowingCharge": 10,
-  "image": <image_file>
+  "title": "JavaScript: The Good Parts",
+  "library": "library_id_here",
+  "isbn": "9780596517748",
+  "genre": "Programming",
+  "description": "A book about JavaScript",
+  "publishedYear": 2008,
+  "pages": 176,
+  "borrowingCharge": 5.99,
+  "image": <file>
 }
 ```
 
-#### **Borrow Book**
-```bash
-POST /api/v1/borrow
+#### Update Book (Authors only)
+```http
+PUT /books/:id
+Authorization: Bearer <jwt_token>
+Content-Type: multipart/form-data
+```
+
+#### Delete Book (Authors only)
+```http
+DELETE /books/:id
+Authorization: Bearer <jwt_token>
+```
+
+### Library Endpoints
+
+#### Get All Libraries
+```http
+GET /libraries?page=1&limit=10
+Authorization: Bearer <jwt_token>
+```
+
+#### Create Library (Librarians only)
+```http
+POST /libraries
 Authorization: Bearer <jwt_token>
 Content-Type: application/json
 
 {
-  "bookId": "book_id",
+  "name": "Central Library",
+  "address": "123 Library St",
+  "phone": "+1234567890",
+  "email": "central@library.com",
+  "description": "Main city library"
+}
+```
+
+### Borrowing Endpoints
+
+#### Borrow Book (Borrowers only)
+```http
+POST /borrow
+Authorization: Bearer <jwt_token>
+Content-Type: application/json
+
+{
+  "bookId": "book_id_here",
   "days": 14
 }
 ```
 
-## 🔐 **User Roles & Permissions**
+#### Return Book (Borrowers only)
+```http
+PUT /borrow/return/:bookId
+Authorization: Bearer <jwt_token>
+```
 
-| Role | Permissions |
-|------|-------------|
-| **Author** | Create, update, delete own books |
-| **Borrower** | Borrow and return books, view libraries |
-| **Librarian** | Manage libraries, library inventory, view all books |
+#### Get Borrowed Books
+```http
+GET /borrow/borrowed
+Authorization: Bearer <jwt_token>
+```
 
-## 🌐 **Multilingual Support**
+## 👥 User Roles
 
-The API supports English and Hindi:
-- **English** (default): `en`
-- **Hindi**: `hi`
+### Author
+- Create, update, and delete their own books
+- View all books and libraries
+- Upload book cover images
 
-**Language Detection Priority:**
-1. User profile language preference
-2. `Accept-Language` header
-3. Query parameter `?lang=hi`
-4. Default to English
+### Borrower
+- View all books and libraries
+- Borrow and return books
+- View their borrowed books
 
-## 🛡️ **Security Features**
+### Librarian
+- Create, update, and delete libraries
+- Manage library inventory
+- View all books and libraries
+- Add/remove books from libraries
+
+## 🌐 Multilingual Support
+
+The API supports English and Hindi languages. Set the language preference using:
+
+1. **User Profile**: Set `language` field to `'en'` or `'hi'`
+2. **Accept-Language Header**: Include `Accept-Language: hi` in requests
+3. **Query Parameter**: Add `?lang=hi` to requests
+
+## 🔒 Security Features
 
 - **JWT Authentication**: Secure token-based authentication
-- **Role-Based Authorization**: Fine-grained permission control
-- **Password Hashing**: bcrypt with salt rounds
 - **Rate Limiting**: 100 requests per 15 minutes per IP
-- **Input Validation**: Comprehensive validation with express-validator
-- **CORS Protection**: Cross-origin resource sharing
-- **Security Headers**: Helmet.js for security headers
+- **Input Validation**: Comprehensive request validation
+- **File Upload Security**: File type and content validation
+- **Password Security**: Bcrypt hashing with salt rounds
+- **CORS**: Cross-origin resource sharing configuration
+- **Helmet**: Security headers
 
-## 📝 **Development Notes**
+## 📁 Project Structure
 
-### **Local Development Tips**
-- Use **nodemon** for auto-restart during development
-- MongoDB will automatically create the `elib` database on first connection
-- Images are stored in Firebase Storage (free tier available)
-- All logs are written to `logs/` directory
-- API responses include detailed error messages for debugging
-
-### **Common Commands**
-```bash
-# View application logs
-tail -f logs/combined.log
-
-# Clear logs
-rm logs/*.log
-
-# Check MongoDB connection
-# Connect to: mongodb://localhost:27017/elib
+```
+├── config/
+│   ├── constants.js      # Application constants and messages
+│   ├── database.js       # MongoDB connection
+│   ├── firebase.js       # Firebase configuration
+│   └── index.js          # Main configuration
+├── controllers/          # Request handlers
+├── middlewares/          # Custom middleware
+├── models/              # MongoDB schemas
+├── routes/              # API routes
+├── services/            # Business logic
+├── utils/               # Utility functions
+├── validators/          # Input validation rules
+├── logs/                # Application logs
+├── app.js               # Express app setup
+└── README.md
 ```
 
-## 🏃 **Running the Application**
+## 🐛 Error Handling
 
-### **Start the Server**
-```bash
-npm start
-# Server will start on http://localhost:3000
-```
+The application includes comprehensive error handling with:
 
-### **Testing the API**
-You can test the endpoints using:
-- **Postman** - Import the API collection (if available)
-- **Any REST client**
+- Centralized error middleware
+- Localized error messages
+- Proper HTTP status codes
+- Request validation errors
+- Database operation errors
+- Authentication and authorization errors
 
-### **Basic Test**
-```bash
-# Check if server is running
-curl http://localhost:3000/health
+## 📝 Logging
 
-# Register a new user
-curl -X POST http://localhost:3000/api/v1/users/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Test User",
-    "email": "test@example.com", 
-    "password": "password123",
-    "role": "Author"
-  }'
-```
+Application logs are stored in the `logs/` directory:
+- `error.log`: Error-level logs
+- `combined.log`: All application logs
 
-## 🔧 **Local Configuration**
+## 🧪 Health Check
 
-The application is configured for local development:
-- **MongoDB**: Connects to `mongodb://localhost:27017/elib`
-- **Port**: Runs on `http://localhost:3000`
-- **Logging**: Console output + file logging
-- **Environment**: Development mode with detailed error messages
-
-## 📝 **Logging**
-
-- **Winston Logger**: Structured logging with file rotation
-- **Log Files**: `logs/error.log`, `logs/combined.log`
-- **Console Logging**: Development mode only
-- **Request Logging**: Morgan HTTP request logger
-
-## 🚨 **Error Handling**
-
-Centralized error handling with:
-- **Validation Errors**: Input validation failures
-- **Authentication Errors**: JWT and authorization failures
-- **Database Errors**: MongoDB operation failures
-- **Business Logic Errors**: Custom application errors
-- **Multilingual Error Messages**: Localized error responses
-
-## 📞 **Health Check**
-
-Monitor application health:
-```
+```http
 GET /health
-
-Response:
-{
-  "status": "OK",
-  "message": "Server is running",
-  "timestamp": "2023-12-07T10:30:00.000Z",
-  "uptime": 3600.123
-}
 ```
 
----
+Returns server status and uptime information.
 
-**A simple, local bookkeeping service built with Node.js, Express, and MongoDB - ready to run locally!** 📚
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+1. **MongoDB Connection Error**
+   - Ensure MongoDB is running
+   - Check connection string in `.env`
+   - Verify network connectivity
+
+2. **Firebase Upload Error**
+   - Verify Firebase credentials
+   - Check storage bucket permissions
+   - Ensure Firebase Storage is enabled
+
+3. **JWT Authentication Error**
+   - Check JWT_SECRET in `.env`
+   - Verify token format in Authorization header
+   - Ensure token hasn't expired
+
+4. **File Upload Issues**
+   - Check file size (max 5MB)
+   - Verify file type (JPEG, PNG, WebP)
+   - Ensure proper Content-Type header
+
+### Debug Mode
+
+Set `NODE_ENV=development` in your `.env` file to enable:
+- Console logging
+- Detailed error messages
+- Request logging
+
+
