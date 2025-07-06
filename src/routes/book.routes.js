@@ -1,8 +1,9 @@
 const express = require("express");
 const bookController = require("../controllers/book.controller");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
-const { upload } = require("../middlewares/upload.middleware");
+const { upload ,validateFileContent} = require("../middlewares/upload.middleware");
 const { bookValidation, updateBookValidation } = require("../validators/book.validator");
+
 const { USER_ROLES } = require("../config/constants");
 
 const router = express.Router();
@@ -14,6 +15,7 @@ router.post(
   authenticate,
   authorize(USER_ROLES.AUTHOR),
   upload.single("image"),
+  validateFileContent,
   bookValidation,
   bookController.createBook,
 );
@@ -22,6 +24,7 @@ router.put(
   authenticate,
   authorize(USER_ROLES.AUTHOR),
   upload.single("image"),
+  validateFileContent,
   updateBookValidation,
   bookController.updateBook,
 );
