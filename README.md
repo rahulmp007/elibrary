@@ -79,6 +79,34 @@ MAX_BORROW_DAYS=30
 DEFAULT_LATE_FEE_PER_DAY=5
 ```
 
+
+
+
+### 🔐 Generate JWT Secret Key Using Node.js
+
+To generate a secure JWT secret key, run the following command in your terminal:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(64).toString('base64'))"
+```
+
+This will generate a 64-byte base64-encoded string like:
+
+```
+UQRCblNy9VjN5VmDsckArjSpDgw5Sa8OTQO8Vtw5Rw5WACSpTD++ydE4rJ3rDdWxaaAvCEo7oLMwNLLX2Bv9Ysg==
+```
+
+Paste the result into your `.env` file:
+
+```env
+JWT_SECRET=UQRCblNy9VjN5VmDsckArjSpDgw5Sa8OTQO8Vtw5Rw5WACSpTD++ydE4rJ3rDdWxaaAvCEo7oLMwNLLX2Bv9Ysg==
+```
+
+Make sure to keep this key secure and **never share it publicly**.
+
+
+
+
 ### 4. Firebase Setup
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
