@@ -1,6 +1,4 @@
-// ==========================================
-// auth.validator.js - UPDATED IMPORTS
-// ==========================================
+
 const { body } = require("express-validator");
 const { handleValidationErrors } = require("../middlewares/validation.middleware"); // FIXED
 const { USER_ROLES } = require("../config/constants");

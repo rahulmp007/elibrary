@@ -44,7 +44,7 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // ✅ SMART FIX: Handle service errors that use MESSAGES directly
+  
   if (err.message && typeof err.message === 'string') {
     // Check if error message matches any of our English messages
     const englishMessages = MESSAGES.en;
@@ -62,7 +62,7 @@ const errorHandler = (err, req, res, next) => {
     }
   }
 
-  // Custom service errors with messageKey (for future use)
+  
   if (err.messageKey) {
     const statusCode = err.statusCode || HTTP_STATUS.INTERNAL_SERVER_ERROR;
     return res.status(statusCode).json({
@@ -71,7 +71,7 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Default error
+
   const statusCode = err.statusCode || HTTP_STATUS.INTERNAL_SERVER_ERROR;
   const message = getLocalizedMessage("SERVER_ERROR", language);
   

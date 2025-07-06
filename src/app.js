@@ -19,12 +19,10 @@ const app = express();
 // Connect to database
 connectDatabase();
 
-// Security middleware
 app.use(helmet());
 app.use(cors());
 app.use(compression());
 
-// Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
@@ -37,7 +35,6 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Logging
 if (config.NODE_ENV !== "test") {
   app.use(
     morgan("combined", {
@@ -46,11 +43,10 @@ if (config.NODE_ENV !== "test") {
   );
 }
 
-// Body parsing middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Language middleware - ADDED for multilingual support
+
 app.use(languageMiddleware);
 
 // Health check
@@ -64,10 +60,10 @@ app.get("/health", (req, res) => {
 });
 
 app.use(languageMiddleware);
+
 // API routes
 app.use("/api/v1", routes);
 
-// Error handling
 app.use(notFoundHandler);
 app.use(errorHandler);
 

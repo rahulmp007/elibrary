@@ -62,7 +62,6 @@ class UploadService {
       }
     } catch (error) {
       logger.error("Firebase delete error:", error);
-      // Don't throw error for delete operations
     }
   }
 }

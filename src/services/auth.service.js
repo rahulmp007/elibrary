@@ -8,9 +8,9 @@ class AuthService {
     const existingUser = await User.findOne({ email: userData.email });
 
     if (existingUser) {
-      const error = new Error("DUPLICATE_EMAIL");  // Use error codes instead of messages
+      const error = new Error("DUPLICATE_EMAIL");  
       error.statusCode = HTTP_STATUS.CONFLICT;
-      error.messageKey = "USER_ALREADY_EXISTS"; // Add message key for localization
+      error.messageKey = "USER_ALREADY_EXISTS"; 
       throw error;
     }
 
@@ -28,19 +28,17 @@ class AuthService {
     );
 
     if (!user || !(await user.comparePassword(password))) {
-      const error = new Error("INVALID_LOGIN");  // Use error code instead of message
+      const error = new Error("INVALID_LOGIN");  
       error.statusCode = HTTP_STATUS.UNAUTHORIZED;
-      error.messageKey = "INVALID_CREDENTIALS"; // Add message key for localization
+      error.messageKey = "INVALID_CREDENTIALS"; 
       throw error;
     }
 
-    // Update last login
     user.lastLogin = new Date();
     await user.save();
 
     const token = this.generateToken(user._id);
 
-    // Remove password from response
     user.password = undefined;
 
     return { user, token };

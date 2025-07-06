@@ -7,7 +7,6 @@ const { USER_ROLES } = require("../config/constants");
 
 const router = express.Router();
 
-// Borrow a book - POST /api/borrow
 router.post(
   "/",
   authenticate,
@@ -16,7 +15,6 @@ router.post(
   borrowController.borrowBook,
 );
 
-// Return a book - PUT /api/borrow/return/:id (FIXED: was /return/:id)
 router.put(
   "/return/:id",
   authenticate,
@@ -24,7 +22,6 @@ router.put(
   borrowController.returnBook,
 );
 
-// Get borrowed books by user
 router.get(
   "/borrowed",
   authenticate,

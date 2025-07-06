@@ -68,7 +68,6 @@ class LibraryService {
       throw error;
     }
 
-    // Check if library has books
     const booksCount = await Book.countDocuments({ library: libraryId });
     if (booksCount > 0) {
       const error = new Error("Cannot delete library with existing books");

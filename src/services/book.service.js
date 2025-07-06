@@ -82,7 +82,6 @@ class BookService {
       throw error;
     }
 
-    // Check if user is the author
     if (book.author.toString() !== authorId.toString()) {
       const error = new Error(MESSAGES.FORBIDDEN);
       error.statusCode = HTTP_STATUS.FORBIDDEN;
@@ -91,7 +90,6 @@ class BookService {
 
     let imageUrl = book.image;
     if (imageFile) {
-      // Delete old image if exists
       if (book.image) {
         await uploadService.deleteFromFirebase(book.image);
       }
@@ -120,21 +118,18 @@ class BookService {
       throw error;
     }
 
-    // Check if user is the author
     if (book.author.toString() !== authorId.toString()) {
       const error = new Error(MESSAGES.FORBIDDEN);
       error.statusCode = HTTP_STATUS.FORBIDDEN;
       throw error;
     }
 
-    // Check if book is currently borrowed
     if (!book.isAvailable) {
       const error = new Error("Cannot delete a borrowed book");
       error.statusCode = HTTP_STATUS.BAD_REQUEST;
       throw error;
     }
 
-    // Delete image if exists
     if (book.image) {
       await uploadService.deleteFromFirebase(book.image);
     }

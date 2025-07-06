@@ -28,14 +28,12 @@ class BorrowService {
       throw error;
     }
 
-    // Calculate due date and charges
     const borrowedAt = new Date();
     const dueDate = new Date();
     dueDate.setDate(dueDate.getDate() + days);
 
     const totalCharge = book.borrowingCharge * days;
 
-    // Update book
     book.borrower = borrowerId;
     book.borrowedAt = borrowedAt;
     book.dueDate = dueDate;
@@ -73,14 +71,12 @@ class BorrowService {
       throw error;
     }
 
-    // Check if user is the borrower
     if (book.borrower._id.toString() !== borrowerId.toString()) {
       const error = new Error(MESSAGES.FORBIDDEN);
       error.statusCode = HTTP_STATUS.FORBIDDEN;
       throw error;
     }
 
-    // Calculate late fee if overdue
     const returnDate = new Date();
     const isOverdue = returnDate > book.dueDate;
     const overdueDays = isOverdue
@@ -88,7 +84,6 @@ class BorrowService {
       : 0;
     const lateFee = overdueDays * config.DEFAULT_LATE_FEE_PER_DAY;
 
-    // Update book
     book.borrower = null;
     book.borrowedAt = null;
     book.dueDate = null;
