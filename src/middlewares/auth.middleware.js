@@ -8,10 +8,11 @@ const authenticate = async (req, res, next) => {
   try {
     const authHeader = req.header("Authorization");
 
-   
-    
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return sendError(res, HTTP_STATUS.UNAUTHORIZED, MESSAGES.TOKEN_REQUIRED);
+      return res.sendLocalizedError(
+        HTTP_STATUS.UNAUTHORIZED,
+        MESSAGES.TOKEN_REQUIRED
+      );
     }
 
     const token = authHeader.replace("Bearer ", "");
@@ -20,24 +21,36 @@ const authenticate = async (req, res, next) => {
     const user = await User.findById(decoded.userId);
 
     if (!user || !user.isActive) {
-      return sendError(res, HTTP_STATUS.UNAUTHORIZED, MESSAGES.INVALID_TOKEN);
+      return res.sendLocalizedError(
+        HTTP_STATUS.UNAUTHORIZED,
+        MESSAGES.TOKEN_REQUIRED
+      );
     }
 
     req.user = user;
     next();
   } catch (error) {
-    return sendError(res, HTTP_STATUS.UNAUTHORIZED, MESSAGES.INVALID_TOKEN);
+    return res.sendLocalizedError(
+      HTTP_STATUS.UNAUTHORIZED,
+      MESSAGES.TOKEN_REQUIRED
+    );
   }
 };
 
 const authorize = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
-      return sendError(res, HTTP_STATUS.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
+      return res.sendLocalizedError(
+        HTTP_STATUS.UNAUTHORIZED,
+        MESSAGES.UNAUTHORIZED
+      );
     }
 
     if (!roles.includes(req.user.role)) {
-      return sendError(res, HTTP_STATUS.FORBIDDEN, MESSAGES.FORBIDDEN);
+      return res.sendLocalizedError(
+        HTTP_STATUS.UNAUTHORIZED,
+        MESSAGES.FORBIDDEN
+      );
     }
 
     next();
