@@ -3,6 +3,7 @@ const User = require("../models/user.model");
 const config = require("../config");
 const { HTTP_STATUS, MESSAGES } = require("../config/constants");
 
+
 const authenticate = async (req, res, next) => {
   try {
     const authHeader = req.header("Authorization");

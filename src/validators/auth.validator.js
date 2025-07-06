@@ -2,6 +2,7 @@
 const { body } = require("express-validator");
 const { handleValidationErrors } = require("../middlewares/validation.middleware"); // FIXED
 const { USER_ROLES } = require("../config/constants");
+const config = require('../config/index');
 
 const registerValidation = [
   body("name")
